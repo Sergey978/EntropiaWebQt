@@ -92,7 +92,7 @@ void Startup::start() {
         QString dbName = dBSettings->value("path").toString();
         // Convert relative fileName to absolute, based on the directory of the config file.
         #ifdef Q_OS_WIN32
-                if (QDir::isRelativePath(dbName) && settings->format()!=QSettings::NativeFormat)
+                if (QDir::isRelativePath(dbName) && dBSettings->format()!=QSettings::NativeFormat)
         #else
                 if (QDir::isRelativePath(dbName))
         #endif
