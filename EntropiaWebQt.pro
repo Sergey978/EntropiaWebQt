@@ -89,8 +89,8 @@ include(libs/QtWebApp/qtservice/qtservice.pri)
 # select the required library package
 
 #include(libs/SQLpp11_linux/sqlpp11-mysql-connector-lib.pri)
-#include(libs/SQLpp11_linux/sqlpp-sqliteconnector-lib.pri)
+include(libs/SQLpp11_linux/sqlpp-sqliteconnector-lib.pri)
 #include(libs/SQLpp11_windows/sqlpp11-mysql-connector-lib.pri)
-include(libs/SQLpp11_windows/sqlpp-sqliteconnector-lib.pri)
+#include(libs/SQLpp11_windows/sqlpp-sqliteconnector-lib.pri)
 
 

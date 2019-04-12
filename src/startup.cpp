@@ -88,16 +88,29 @@ void Startup::start() {
 
     if (dBSettings->value("vendor").toString() == "sqlite")
     {
-        DbConfig::setConfig(dBSettings->value("path").toString().toStdString()
-                            , 6
-                            ,dBSettings->value("debug").toBool());
+
+        QString dbName = dBSettings->value("path").toString();
+        // Convert relative fileName to absolute, based on the directory of the config file.
+        #ifdef Q_OS_WIN32
+                if (QDir::isRelativePath(dbName) && settings->format()!=QSettings::NativeFormat)
+        #else
+                if (QDir::isRelativePath(dbName))
+        #endif
+                {
+                    QFileInfo configFile(dBSettings->fileName());
+                    dbName=QFileInfo(configFile.absolutePath(),dbName).absoluteFilePath();
+                }
+        DbConfig::setConfig(dbName.toStdString(), 6  ,dBSettings->value("debug").toBool());
+
+
+
     }
     else if (dBSettings->value("vendor").toString() == "mysql")
     {
-//        DbConfig::setConfig(dBSettings->value("user").toString().toStdString()
-//                            , dBSettings->value("password").toString().toStdString()
-//                                         , dBSettings->value("database").toString().toStdString()
-//                                          ,dBSettings->value("debug").toBool() );
+        //        DbConfig::setConfig(dBSettings->value("user").toString().toStdString()
+        //                            , dBSettings->value("password").toString().toStdString()
+        //                                         , dBSettings->value("database").toString().toStdString()
+        //                                          ,dBSettings->value("debug").toBool() );
     }
 
 }
