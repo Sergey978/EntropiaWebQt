@@ -8,8 +8,7 @@
 #include "../FrameWork/Utilities/cypher.h"
 
 
-AccountContoller::AccountContoller(Controller * contr ):controller(contr),
-    t(RequestMapper::templateLoader->getTemplate("public/signup"))
+AccountContoller::AccountContoller(Controller * contr ):controller(contr)
 {
 
 }
@@ -17,6 +16,8 @@ AccountContoller::AccountContoller(Controller * contr ):controller(contr),
 void AccountContoller::signup()
 {
     HttpSession session=controller->getSession();
+
+    Template t = RequestMapper::templateLoader->getTemplate("public/signup");
     if (controller->getHttpRequest()->getMethod() == "GET")
     {
 
@@ -26,6 +27,7 @@ void AccountContoller::signup()
         {
             controller->getHttpResponse()->redirect("manage/index");
         }
+         controller->getHttpResponse()->setHeader("Access-Control-Allow-Origin:", "*");
         controller->getHttpResponse()->write(t.toUtf8(),true);
     }
     else if (controller->getHttpRequest()->getMethod() == "POST")
@@ -70,6 +72,7 @@ void AccountContoller::signup()
 void AccountContoller::signin()
 {
     HttpSession session=controller->getSession();
+    Template t = RequestMapper::templateLoader->getTemplate("public/signin");
     QString _resultJSON = "{\"response\":\"false\"}";
     if (controller->getHttpRequest()->getMethod() == "GET")
     {
@@ -100,20 +103,20 @@ void AccountContoller::signin()
             //if user not found
             if (user.getId() == 0)
             {
-                 controller->getHttpResponse()->write(_resultJSON.toUtf8(),true);
+                controller->getHttpResponse()->write(_resultJSON.toUtf8(),true);
                 return;
             }
             // check password
             else if ( user.getPasswordHash() != Cypher::getHashStringFromQba(reqParams["Password"], "salt")){
                 // password incorrect
-                 controller->getHttpResponse()->write(_resultJSON.toUtf8(),true);
+                controller->getHttpResponse()->write(_resultJSON.toUtf8(),true);
                 return;
             }
             else{
                 // login and password correct
                 session.set("username",QString::fromUtf8(user.getUserName().c_str()));
                 session.set("logintime",QTime::currentTime());
-                 _resultJSON = "{\"response\":\"true\"}";
+                _resultJSON = "{\"response\":\"true\"}";
             }
 
         }
@@ -153,6 +156,8 @@ void AccountContoller::isUserNameExist()
         else {
             _resultJSON = "{\"response\":\"false\"}";
         }
+
+        controller->getHttpResponse()->setHeader("Access-Control-Allow-Origin:", "*");
         controller->getHttpResponse()->write(_resultJSON.toUtf8(),true);
     }
     else if (controller->getHttpRequest()->getMethod() == "OPTIONS") {
@@ -185,6 +190,7 @@ void AccountContoller::isUserEmailExist()
         else {
             _resultJSON = "{\"response\":\"false\"}";
         }
+        controller->getHttpResponse()->setHeader("Access-Control-Allow-Origin:", "*");
         controller->getHttpResponse()->write(_resultJSON.toUtf8(),true);
 
     }

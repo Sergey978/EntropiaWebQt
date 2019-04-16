@@ -3,22 +3,22 @@
 #include "httprequesthandler.h"
 #include "httpsession.h"
 
+#include <QObject>
+
 using namespace stefanfrings;
 
-class Controller : public HttpRequestHandler
+class Controller : public QObject
 {
     Q_OBJECT
 public:
     Controller(QObject* parent=0);
-    void service(HttpRequest& request, HttpResponse& response);
-    void error404(HttpResponse &response);
     HttpRequest * getHttpRequest();
     HttpResponse * getHttpResponse();
     HttpSession getSession();
     void setHttpRequest( HttpRequest & req);
     void setHttpResponse( HttpResponse & resp);
     void setReqResp(HttpRequest &req, HttpResponse &resp);
-    virtual ~Controller(){}
+    ~Controller(){}
 
 protected:
     HttpRequest * req;

@@ -1,22 +1,10 @@
 #include "controller.h"
 #include "../requestmapper.h"
 
-Controller::Controller(QObject* parent)
-: HttpRequestHandler(parent)
+Controller::Controller(QObject* parent):QObject(parent)
 {
 
 }
-
- void Controller::service(HttpRequest &request, HttpResponse &response)
-{
-
- }
-
- void Controller::error404(HttpResponse &response)
- {
-     response.redirect("/login");
-     return;
- }
 
 
  HttpRequest * Controller::getHttpRequest()

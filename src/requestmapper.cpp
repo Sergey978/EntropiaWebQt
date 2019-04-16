@@ -27,8 +27,8 @@ RequestMapper::RequestMapper(QObject* parent)
                           fnptr<void(UrlParams)>([&](UrlParams p){adminController.user(p.Num("id"));}));
 
     //account controller
-    matcher.regController("GET|POST;account/",
-                          fnptr<void(UrlParams)>([&](UrlParams ){accountController.index();}));
+//    matcher.regController("GET|POST;account/",
+//                          fnptr<void(UrlParams)>([&](UrlParams ){accountController.index();}));
 
 
     // methods for check is empty username and user email
@@ -38,22 +38,25 @@ RequestMapper::RequestMapper(QObject* parent)
                           }));
 
 
-    matcher.regController("GET|POST;account/(method:str)",
+    matcher.regController("GET|POST;account/(action:str)",
                           fnptr<void(UrlParams p)>([&](UrlParams p){
-                              if(p.Str("method")=="signup" ) {
-                                  accountController.signup();
-                              }
-                              if(p.Str("method")=="signin" ) {
-                                  accountController.signin();
-                              }
-                              else if( p.Str("method") == "username" ){
-                                  accountController.isUserNameExist();
-                              }
-                              else if (p.Str("method") == "useremail") {
-                                  accountController.isUserEmailExist();
-                              }
+//                              if(p.Str("method")=="signup" ) {
+//                                  accountController.signup();
+//                              }
+//                              if(p.Str("method")=="signin" ) {
+//                                  accountController.signin();
+//                              }
+//                              else if( p.Str("method") == "username" ){
+//                                  accountController.isUserNameExist();
+//                              }
+//                              else if (p.Str("method") == "useremail") {
+//                                  accountController.isUserEmailExist();
+//                              }
 
 
+
+              QMetaObject::invokeMethod(accountController, p.Str("action").toLatin1().data(),
+                             Qt::DirectConnection);
 
                           }));
 
@@ -69,6 +72,12 @@ RequestMapper::RequestMapper(QObject* parent)
 
 }
 
+RequestMapper::~RequestMapper()
+{
+
+    delete contr;
+}
+
 void RequestMapper::service(HttpRequest& request, HttpResponse& response) {
     QByteArray path=request.getPath();
     qDebug("RequestMapper: path=%s",path.data());
@@ -77,7 +86,7 @@ void RequestMapper::service(HttpRequest& request, HttpResponse& response) {
     logger->set("currentUser",username);
     QByteArray sessionId=sessionStore->getSessionId(request,response);
 
-    contr.setReqResp(request, response);
+    contr->setReqResp(request, response);
 
 
     if (path.startsWith("/files" )

@@ -23,8 +23,19 @@ using namespace stefanfrings;
 
 class RequestMapper : public HttpRequestHandler {
     Q_OBJECT
+    Q_DISABLE_COPY(RequestMapper)
 public:
+    /**
+          Constructor.
+          @param parent Parent object
+    */
     RequestMapper(QObject* parent=0);
+
+    /**
+          Destructor.
+    */
+       ~RequestMapper();
+
     void service(HttpRequest& request, HttpResponse& response);
     static HttpSessionStore* sessionStore;
     static StaticFileController* staticFileController;
@@ -32,14 +43,15 @@ public:
     static Logger* logger;
 
 private:
-    Controller contr;    
-    HelloWorldController helloWorldController{&contr};
-    ErrorController errController{&contr};
-    AdminController adminController{&contr};
-    HomeController homeController{&contr};
-    AccountContoller accountController{&contr};
-
     UrlMatcher  matcher;
+
+    Controller * contr =new Controller();
+    HelloWorldController helloWorldController{contr};
+    ErrorController errController{contr};
+    AdminController adminController{contr};
+    HomeController homeController{contr};
+    AccountContoller * accountController = new AccountContoller(contr);
+
 
 };
 
