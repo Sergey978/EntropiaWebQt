@@ -26,41 +26,27 @@ RequestMapper::RequestMapper(QObject* parent)
     matcher.regController("GET;admin/user/(id:num)",
                           fnptr<void(UrlParams)>([&](UrlParams p){adminController.user(p.Num("id"));}));
 
-    //account controller
-//    matcher.regController("GET|POST;account/",
-//                          fnptr<void(UrlParams)>([&](UrlParams ){accountController.index();}));
+    //account controller actions resolver
 
-
-    // methods for check is empty username and user email
-    matcher.regController("GET;account/(method:str)/(param:any)",
-                          fnptr<void(UrlParams p)>([&](UrlParams p ){
-
-                          }));
+    matcher.regController("GET|POST;account/",
+                          fnptr<void(UrlParams )>([&](UrlParams ){
+                              accountController->index();                }));
 
 
     matcher.regController("GET|POST;account/(action:str)",
                           fnptr<void(UrlParams p)>([&](UrlParams p){
-//                              if(p.Str("method")=="signup" ) {
-//                                  accountController.signup();
-//                              }
-//                              if(p.Str("method")=="signin" ) {
-//                                  accountController.signin();
-//                              }
-//                              else if( p.Str("method") == "username" ){
-//                                  accountController.isUserNameExist();
-//                              }
-//                              else if (p.Str("method") == "useremail") {
-//                                  accountController.isUserEmailExist();
-//                              }
+
+                              bool result =    QMetaObject::invokeMethod(accountController,
+                              p.Str("action").toLatin1().data(),
+                              Qt::DirectConnection);
+                              if(!result) errController.error404();           }));
 
 
 
-              QMetaObject::invokeMethod(accountController, p.Str("action").toLatin1().data(),
-                             Qt::DirectConnection);
 
-                          }));
 
     // homeController
+
     matcher.regController("GET;/",
                           fnptr<void(UrlParams)>([&](UrlParams p){
                               homeController.home();   }));
