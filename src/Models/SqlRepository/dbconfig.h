@@ -1,6 +1,8 @@
 #ifndef DBCONFIG_H
 #define DBCONFIG_H
 
+#include <QDebug>
+
 //*******************************************************
 //* Config for MySql/MariaDb database uncomment if it use
 //*******************************************************
@@ -36,7 +38,9 @@ public:
     static void   setConfig(std::string path,int option =6, bool debug = false){
         conf.path_to_database = path;
         conf.flags = option;
-        conf.debug = debug;
+        conf.debug = debug;      
+
+        qDebug("SQlite: path=%s",path.data());
     }
 };
 
