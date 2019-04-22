@@ -27,7 +27,7 @@ void AccountContoller::signup()
         {
             controller->getHttpResponse()->redirect("manage/index");
         }
-         controller->getHttpResponse()->setHeader("Access-Control-Allow-Origin:", "*");
+        controller->getHttpResponse()->setHeader("Access-Control-Allow-Origin:", "*");
         controller->getHttpResponse()->write(t.toUtf8(),true);
     }
     else if (controller->getHttpRequest()->getMethod() == "POST")

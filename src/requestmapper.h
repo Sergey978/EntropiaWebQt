@@ -49,7 +49,7 @@ private:
     HelloWorldController helloWorldController{contr};
     ErrorController errController{contr};
     AdminController adminController{contr};
-    HomeController homeController{contr};
+    HomeController * homeController = new HomeController(contr) ;
     AccountContoller * accountController = new AccountContoller(contr);
 
 

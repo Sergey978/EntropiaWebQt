@@ -4,10 +4,13 @@
 #include "../FrameWork/controller.h"
 
 
-class HomeController
+class HomeController: public QObject
 {
+    Q_OBJECT
 public:
     HomeController(Controller * contr);
+
+public slots:
     void home();
     void about();
     void contact();

@@ -30,7 +30,7 @@ RequestMapper::RequestMapper(QObject* parent)
 
     matcher.regController("GET|POST;account/",
                           fnptr<void(UrlParams )>([&](UrlParams ){
-                              accountController->index();                }));
+                              accountController->index();      }));
 
 
     matcher.regController("GET|POST;account/(action:str)",
@@ -39,21 +39,21 @@ RequestMapper::RequestMapper(QObject* parent)
                               bool result =    QMetaObject::invokeMethod(accountController,
                               p.Str("action").toLatin1().data(),
                               Qt::DirectConnection);
-                              if(!result) errController.error404();           }));
-
-
-
+                              if(!result) errController.error404();     }));
 
 
     // homeController
 
     matcher.regController("GET;/",
-                          fnptr<void(UrlParams)>([&](UrlParams p){
-                              homeController.home();   }));
-    matcher.regController("GET;home/(method:str)",
-                          fnptr<void(UrlParams)>([&](UrlParams p){
-                              if (p.Str("method") == "contact")  homeController.contact();
-                              else if (p.Str("method") == "about") homeController.about();
+                          fnptr<void(UrlParams)>([&](UrlParams ){
+                              homeController->home();   }));
+
+    matcher.regController("GET;home/(action:str)",
+                          fnptr<void(UrlParams p)>([&](UrlParams p){
+                              bool result =  QMetaObject::invokeMethod(homeController,
+                              p.Str("action").toLatin1().data(),
+                              Qt::DirectConnection);
+                              if(!result) errController.error404();
                           }));
 
 }
@@ -61,6 +61,8 @@ RequestMapper::RequestMapper(QObject* parent)
 RequestMapper::~RequestMapper()
 {
 
+    delete homeController;
+    delete  accountController;
     delete contr;
 }
 
