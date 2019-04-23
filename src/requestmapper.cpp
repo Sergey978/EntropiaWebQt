@@ -27,11 +27,9 @@ RequestMapper::RequestMapper(QObject* parent)
                           fnptr<void(UrlParams)>([&](UrlParams p){adminController.user(p.Num("id"));}));
 
     //account controller actions resolver
-
     matcher.regController("GET|POST;account/",
                           fnptr<void(UrlParams )>([&](UrlParams ){
                               accountController->index();      }));
-
 
     matcher.regController("GET|POST;account/(action:str)",
                           fnptr<void(UrlParams p)>([&](UrlParams p){
@@ -40,6 +38,20 @@ RequestMapper::RequestMapper(QObject* parent)
                               p.Str("action").toLatin1().data(),
                               Qt::DirectConnection);
                               if(!result) errController.error404();     }));
+
+
+    //manage controller actions resolver
+    matcher.regController("GET|POST;manage/",
+                          fnptr<void(UrlParams )>([&](UrlParams ){
+                              manageController->index();      }));
+
+    matcher.regController("GET|POST;manage/(action:str)",
+                          fnptr<void(UrlParams p)>([&](UrlParams p){
+                              bool result =    QMetaObject::invokeMethod(manageController,
+                              p.Str("action").toLatin1().data(),
+                              Qt::DirectConnection);
+                              if(!result) errController.error404();     }));
+
 
 
     // homeController
@@ -63,6 +75,7 @@ RequestMapper::~RequestMapper()
 
     delete homeController;
     delete  accountController;
+    delete  manageController;
     delete contr;
 }
 

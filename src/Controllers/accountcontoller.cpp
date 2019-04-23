@@ -133,7 +133,18 @@ void AccountContoller::signin()
 
 void AccountContoller::index()
 {
-    controller->getHttpResponse()->redirect("/account/signup");
+    HttpSession session=controller->getSession();
+    QString username=session.get("username").toString();
+
+           if (!username.isEmpty())
+           {
+                controller->getHttpResponse()->redirect("/manage");
+           }
+           else {
+                controller->getHttpResponse()->redirect("/account/signin");
+
+           }
+
 }
 
 void AccountContoller::isUserNameExist()

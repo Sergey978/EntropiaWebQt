@@ -11,6 +11,7 @@
 #include "Controllers/admincontroller.h"
 #include "Controllers/homecontroller.h"
 #include "Controllers/accountcontoller.h"
+#include "Controllers/managecontroller.h"
 
 #include "logger.h"
 #include "staticfilecontroller.h"
@@ -51,6 +52,7 @@ private:
     AdminController adminController{contr};
     HomeController * homeController = new HomeController(contr) ;
     AccountContoller * accountController = new AccountContoller(contr);
+    ManageController * manageController = new ManageController(contr);
 
 
 };

@@ -43,6 +43,7 @@ SOURCES += \
     src/ViewModels/Account/signupviewmodel.cpp \
     src/FrameWork/Utilities/cypher.cpp \
     src/ViewModels/Account/signinviewmodel.cpp \
+    src/Controllers/managecontroller.cpp
    
   
     
@@ -81,6 +82,7 @@ HEADERS += \
     src/ViewModels/Account/signupviewmodel.h \
     src/FrameWork/Utilities/cypher.h \
     src/ViewModels/Account/signinviewmodel.h \
+    src/Controllers/managecontroller.h
  
 
 include(libs/QtWebApp/httpserver/httpserver.pri)
@@ -204,7 +206,9 @@ DISTFILES += \
     docroot/public/sidebar-left.html \
     docroot/public/sidebar-right.html \
     docroot/public/signin.html \
-    docroot/public/signup.html
+    docroot/public/signup.html \
+    docroot/assets/js/navbar.js \
+
 
 
 
