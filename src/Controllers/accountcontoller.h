@@ -19,7 +19,8 @@ public slots:
 
 private:
     Controller *controller;
-   // Template t;
+    void setCommonTemplate();
+   Template t;
 };
 
 #endif // ACCOUNTCONTOLLER_H

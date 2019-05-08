@@ -19,6 +19,7 @@ private:
     Controller * controller;
     Template t;
     void setCommonTemplate();
+    void setViewBagData(const QString & pageName);
 };
 
 #endif // HOMECONTROLLER_H

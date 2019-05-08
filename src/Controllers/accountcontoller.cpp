@@ -8,7 +8,8 @@
 #include "../FrameWork/Utilities/cypher.h"
 
 
-AccountContoller::AccountContoller(Controller * contr ):controller(contr)
+AccountContoller::AccountContoller(Controller * contr ):controller(contr),
+    t(RequestMapper::templateLoader->getTemplate("account/layout"))
 {
 
 }
@@ -17,7 +18,7 @@ void AccountContoller::signup()
 {
     HttpSession session=controller->getSession();
 
-    Template t = RequestMapper::templateLoader->getTemplate("public/signup");
+    Template t = RequestMapper::templateLoader->getTemplate("account/layout");
     if (controller->getHttpRequest()->getMethod() == "GET")
     {
 
@@ -27,7 +28,7 @@ void AccountContoller::signup()
         {
             controller->getHttpResponse()->redirect("manage/index");
         }
-        controller->getHttpResponse()->setHeader("Access-Control-Allow-Origin:", "*");
+        setCommonTemplate();
         controller->getHttpResponse()->write(t.toUtf8(),true);
     }
     else if (controller->getHttpRequest()->getMethod() == "POST")
@@ -205,6 +206,18 @@ void AccountContoller::isUserEmailExist()
         controller->getHttpResponse()->write(_resultJSON.toUtf8(),true);
 
     }
+
+}
+
+void AccountContoller::setCommonTemplate()
+{
+    Template footer = RequestMapper::templateLoader->getTemplate("default-share/footer");
+    Template head = RequestMapper::templateLoader->getTemplate("default-share/head");
+    Template navbar = RequestMapper::templateLoader->getTemplate("default-share/navbar");
+
+    t.setVariable("footer", footer);
+    t.setVariable("head", head);
+    t.setVariable("navbar", navbar);
 
 }
 

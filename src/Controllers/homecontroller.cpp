@@ -12,42 +12,23 @@ HomeController::HomeController(Controller * contr ):controller(contr),
 void HomeController::home()
 {
 
-    HttpSession session= controller->getSession();
-    QString username=session.get("username").toString();
 
     t = RequestMapper::templateLoader->getTemplate("home/home-layout");
     Template headerSlider = RequestMapper::templateLoader->getTemplate("home/header-slider");
     setCommonTemplate();
     t.setVariable("header-slider", headerSlider);
-
-    QJsonObject user;
-    user["userName"] = "username";
-    user["userId"] = 1;
-
-    QJsonObject page;
-    page["pageName"] = "Home";
-
-    QJsonObject viewBag;
-    viewBag.insert("user", user);
-    viewBag.insert("page", page);
-
-    QJsonDocument doc(viewBag);
-
-    t.setVariable("viewBagData", doc.toJson(QJsonDocument::Compact));
-
+    setViewBagData( "Home");
     controller->getHttpResponse()->write(t.toUtf8(),true);
 }
 
 void HomeController::about()
 {
-    HttpSession session= controller->getSession();
-    QString username=session.get("username").toString();
 
     t = RequestMapper::templateLoader->getTemplate("home/layout");
     Template mainContent = RequestMapper::templateLoader->getTemplate("home/about-main-cont");
-    setCommonTemplate();   
+    setCommonTemplate();
     t.setVariable("main-content", mainContent);
-
+    setViewBagData( "About");
     controller->getHttpResponse()->write(t.toUtf8(),true);
 
 }
@@ -55,13 +36,11 @@ void HomeController::about()
 void HomeController::contact()
 {
 
-    HttpSession session=controller->getSession();
-    QString username=session.get("username").toString();
-
     t = RequestMapper::templateLoader->getTemplate("home/layout");
     Template mainContent = RequestMapper::templateLoader->getTemplate("home/contact-main-cont");
-    setCommonTemplate();    
-    t.setVariable("main-content", mainContent);  
+    setCommonTemplate();
+    t.setVariable("main-content", mainContent);
+    setViewBagData( "Contact");
     controller->getHttpResponse()->write(t.toUtf8(),true);
 }
 
@@ -75,5 +54,26 @@ void HomeController::setCommonTemplate()
     t.setVariable("footer", footer);
     t.setVariable("head", head);
     t.setVariable("navbar", navbar);
+
+}
+
+void HomeController::setViewBagData(const QString & pageName)
+{
+    HttpSession session= controller->getSession();
+    QString username=session.get("username").toString();
+
+    QJsonObject user;
+    user["userName"] = username;
+    user["userId"] = 1;
+
+    QJsonObject page;
+    page["pageName"] = pageName;
+
+    QJsonObject viewBag;
+    viewBag.insert("user", user);
+    viewBag.insert("page", page);
+
+    QJsonDocument doc(viewBag);
+    t.setVariable("viewBagData", doc.toJson(QJsonDocument::Compact));
 
 }
