@@ -6,6 +6,8 @@
 #include "../Models/SqlRepository/sqlrepository.h"
 #include <QMap>
 #include "../FrameWork/Utilities/cypher.h"
+#include <QJsonObject>
+#include<QJsonDocument>
 
 
 AccountContoller::AccountContoller(Controller * contr ):controller(contr),
@@ -18,7 +20,7 @@ void AccountContoller::signup()
 {
     HttpSession session=controller->getSession();
 
-    Template t = RequestMapper::templateLoader->getTemplate("account/layout");
+    t = RequestMapper::templateLoader->getTemplate("account/layout");
     if (controller->getHttpRequest()->getMethod() == "GET")
     {
 
@@ -29,6 +31,9 @@ void AccountContoller::signup()
             controller->getHttpResponse()->redirect("manage/index");
         }
         setCommonTemplate();
+        Template mainContent = RequestMapper::templateLoader->getTemplate("account/signup-main-cont");
+         t.setVariable("main-content", mainContent);
+        setViewBagData("Signup");
         controller->getHttpResponse()->write(t.toUtf8(),true);
     }
     else if (controller->getHttpRequest()->getMethod() == "POST")
@@ -218,6 +223,27 @@ void AccountContoller::setCommonTemplate()
     t.setVariable("footer", footer);
     t.setVariable("head", head);
     t.setVariable("navbar", navbar);
+
+}
+
+void AccountContoller::setViewBagData(const QString &pageName)
+{
+    HttpSession session= controller->getSession();
+    QString username=session.get("username").toString();
+
+    QJsonObject user;
+    user["userName"] = username;
+    user["userId"] = 1;
+
+    QJsonObject page;
+    page["pageName"] = pageName;
+
+    QJsonObject viewBag;
+    viewBag.insert("user", user);
+    viewBag.insert("page", page);
+
+    QJsonDocument doc(viewBag);
+    t.setVariable("viewBagData", doc.toJson(QJsonDocument::Compact));
 
 }
 

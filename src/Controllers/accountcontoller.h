@@ -19,8 +19,10 @@ public slots:
 
 private:
     Controller *controller;
+    Template t;
     void setCommonTemplate();
-   Template t;
+    void setViewBagData(const QString & pageName);
+
 };
 
 #endif // ACCOUNTCONTOLLER_H
